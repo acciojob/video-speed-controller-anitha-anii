@@ -1,10 +1,11 @@
-// Get DOM elements
-const video = document.querySelector('.player__video');
-const progress = document.querySelector('.progress__filled');
-const playButton = document.querySelector('.player__button');
-const volumeRange = document.querySelector('.player__slider[name="volume"]');
-const playbackSpeedRange = document.querySelector('.player__slider[name="playbackRate"]');
-const skipButtons = document.querySelectorAll('.player__button[data-skip]');
+document.addEventListener('DOMContentLoaded', () => {
+  // Get DOM elements
+  const video = document.querySelector('.player__video');
+  const progress = document.querySelector('.progress__filled');
+  const playButton = document.querySelector('.player__button');
+  const volumeRange = document.querySelector('.player__slider[name="volume"]');
+  const playbackSpeedRange = document.querySelector('.player__slider[name="playbackRate"]');
+  const skipButtons = document.querySelectorAll('.player__button[data-skip]');
 
 // Add event listeners
 video.addEventListener('click', togglePlay);
@@ -49,3 +50,4 @@ function skip() {
   const skipTime = parseFloat(this.dataset.skip);
   video.currentTime += skipTime;
 }
+	  });
