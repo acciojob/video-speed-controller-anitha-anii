@@ -1,5 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
-  // Get DOM elements
+
   const video = document.querySelector('.player__video');
   const progress = document.querySelector('.progress__filled');
   const playButton = document.querySelector('.player__button');
@@ -7,47 +6,46 @@ document.addEventListener('DOMContentLoaded', () => {
   const playbackSpeedRange = document.querySelector('.player__slider[name="playbackRate"]');
   const skipButtons = document.querySelectorAll('.player__button[data-skip]');
 
-// Add event listeners
-video.addEventListener('click', togglePlay);
-playButton.addEventListener('click', togglePlay);
-video.addEventListener('play', updateButton);
-video.addEventListener('pause', updateButton);
-video.addEventListener('timeupdate', updateProgress);
-volumeRange.addEventListener('input', updateVolume);
-playbackSpeedRange.addEventListener('input', updatePlaybackSpeed);
-skipButtons.forEach(button => button.addEventListener('click', skip));
 
-// Function to toggle play/pause
 function togglePlay() {
-  const method = video.paused ? 'play' : 'pause';
-  video[method]();
+  if (video.paused) {
+    video.play();
+    playButton.textContent = '❚ ❚';
+  } else {
+    video.pause();
+    playButton.textContent = '►';
+  }
 }
 
-// Function to update play/pause button
-function updateButton() {
-  const icon = video.paused ? '►' : '❚ ❚';
-  playButton.textContent = icon;
+// Function to update the progress bar
+function updateProgressBar() {
+  const progress = (video.currentTime / video.duration) * 100;
+  progressBar.style.flexBasis = `${progress}%`;
 }
 
-// Function to update progress bar
-function updateProgress() {
-  const percent = (video.currentTime / video.duration) * 100;
-  progress.style.flexBasis = `${percent}%`;
-}
-
-// Function to update volume
-function updateVolume() {
+// Function to handle volume change
+function changeVolume() {
   video.volume = volumeRange.value;
 }
 
-// Function to update playback speed
-function updatePlaybackSpeed() {
+// Function to handle playback speed change
+function changePlaybackSpeed() {
   video.playbackRate = playbackSpeedRange.value;
 }
 
-// Function to skip forward or backward
-function skip() {
+// Function to handle skip buttons
+function skipVideo() {
   const skipTime = parseFloat(this.dataset.skip);
   video.currentTime += skipTime;
 }
-	  });
+
+// Add event listeners
+playButton.addEventListener('click', togglePlay);
+video.addEventListener('click', togglePlay);
+video.addEventListener('timeupdate', updateProgressBar);
+volumeRange.addEventListener('input', changeVolume);
+playbackSpeedRange.addEventListener('input', changePlaybackSpeed);
+skipButtons.forEach(button => button.addEventListener('click', skipVideo));
+
+// Set the video source
+video.src = 'http://clips.vorwaerts-gmbh.de/VfE_html5.mp4';
