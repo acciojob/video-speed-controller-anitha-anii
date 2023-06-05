@@ -1,45 +1,47 @@
-// 
-
-// Get the necessary elements
-const video = document.querySelector('.flex');
-const progressBar = document.querySelector('.progress__filled');
+// Get DOM elements
+const video = document.querySelector('.player__video');
+const progress = document.querySelector('.progress__filled');
 const playButton = document.querySelector('.player__button');
-const volumeSlider = document.querySelector('[name="volume"]');
-const playbackSpeedSlider = document.querySelector('[name="playbackRate"]');
-const skipButtons = document.querySelectorAll('[data-skip]');
+const volumeRange = document.querySelector('.player__slider[name="volume"]');
+const playbackSpeedRange = document.querySelector('.player__slider[name="playbackRate"]');
+const skipButtons = document.querySelectorAll('.player__button[data-skip]');
 
 // Add event listeners
-video.addEventListener('timeupdate', updateProgress);
+video.addEventListener('click', togglePlay);
 playButton.addEventListener('click', togglePlay);
-volumeSlider.addEventListener('input', updateVolume);
-playbackSpeedSlider.addEventListener('input', updatePlaybackSpeed);
+video.addEventListener('play', updateButton);
+video.addEventListener('pause', updateButton);
+video.addEventListener('timeupdate', updateProgress);
+volumeRange.addEventListener('input', updateVolume);
+playbackSpeedRange.addEventListener('input', updatePlaybackSpeed);
 skipButtons.forEach(button => button.addEventListener('click', skip));
 
 // Function to toggle play/pause
 function togglePlay() {
-  if (video.paused) {
-    video.play();
-    playButton.textContent = '❚ ❚'; // Change button text to pause symbol
-  } else {
-    video.pause();
-    playButton.textContent = '►'; // Change button text to play symbol
-  }
+  const method = video.paused ? 'play' : 'pause';
+  video[method]();
+}
+
+// Function to update play/pause button
+function updateButton() {
+  const icon = video.paused ? '►' : '❚ ❚';
+  playButton.textContent = icon;
 }
 
 // Function to update progress bar
 function updateProgress() {
-  const progress = (video.currentTime / video.duration) * 100;
-  progressBar.style.flexBasis = `${progress}%`;
+  const percent = (video.currentTime / video.duration) * 100;
+  progress.style.flexBasis = `${percent}%`;
 }
 
 // Function to update volume
 function updateVolume() {
-  video.volume = this.value;
+  video.volume = volumeRange.value;
 }
 
 // Function to update playback speed
 function updatePlaybackSpeed() {
-  video.playbackRate = this.value;
+  video.playbackRate = playbackSpeedRange.value;
 }
 
 // Function to skip forward or backward
